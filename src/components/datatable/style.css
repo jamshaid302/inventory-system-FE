@@ -1,0 +1,39 @@
+/* Center the table */
+.table-center {
+  padding: 10px;
+}
+
+.table-minimize-space {
+  margin: 0;
+}
+
+.p-datatable .p-datatable-tbody td {
+  padding: 1rem;
+  margin: 0;
+}
+
+/* .p-datatable .p-datatable-thead th {
+  padding: 0.25rem;
+  margin: 0;
+  padding-left: 0;
+} */
+
+.p-datatable .p-datatable-thead {
+  min-width: 60rem;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.p-datatable .p-datatable-tbody tr {
+  margin-bottom: 0;
+}
+
+.p-dropdown-items {
+  padding: 0px;
+}
+
+.p-datatable-scrollable-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 470px; /* Adjust the max height as needed */
+}
