@@ -35,6 +35,10 @@ const Products = {
     );
   },
 
+  getAll: () => {
+    return apiRequests(productsRoutes.getAll, "GET");
+  },
+
   delete: (id) => {
     return apiRequests(`${productsRoutes.delete}/${id}`, "DELETE");
   },

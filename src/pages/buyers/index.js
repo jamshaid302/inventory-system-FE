@@ -23,8 +23,8 @@ const Buyers = () => {
   const schema = Yup.object().shape({
     fullName: Yup.string().required(),
     city: Yup.string(),
-    buyingDate: Yup.string().required(),
-    payment: Yup.number().required(),
+    // buyingDate: Yup.string().required(),
+    // payment: Yup.number().required(),
   });
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Buyers = () => {
       const res = await Buyer.get(first, rows, search);
       const data = res?.data?.buyers.map((item) => ({
         ...item,
-        buyingDate: moment(item?.buyingDate).format("MM-DD-YYYY"),
+        buyingDate: moment(item?.buyingDate).format("MMM-DD-YYYY"),
       }));
       setData({ data, totalRecords: res?.data?.count });
     };

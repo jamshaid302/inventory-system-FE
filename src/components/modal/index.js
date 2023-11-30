@@ -44,9 +44,11 @@ const Modal = ({
   }, [fields, dataToUpdate]);
 
   const handleChange = (name) => (e) => {
+    let type = fields?.find((item) => name === item?.name).type;
+
     formData((prev) => ({
       ...prev,
-      [name]: e.target.value,
+      [name]: type === "date" ? moment(e.target.value) : e.target.value,
     }));
   };
 

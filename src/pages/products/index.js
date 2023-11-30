@@ -100,7 +100,6 @@ const ProductPage = () => {
       await schema.validate(formData, { abortEarly: false });
       let res;
       if (formData?.id) {
-        debugger;
         res = await Products.update(formData);
       } else {
         res = await Products.add(formData);

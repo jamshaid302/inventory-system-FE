@@ -11,6 +11,7 @@ import {
   Gear,
   PlusCircle,
   Bag,
+  Receipt,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -93,6 +94,16 @@ const Sidebar = ({ children, openModal }) => {
                 >
                   <Bag size={24} />{" "}
                   <span className="ms-1 d-none d-sm-inline">Purchases</span>
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link align-middle px-0 cursor"
+                  onClick={() => navigate("/sales")}
+                >
+                  <Receipt size={24} />{" "}
+                  <span className="ms-1 d-none d-sm-inline">Sales</span>
                 </a>
               </li>
 

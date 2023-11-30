@@ -70,8 +70,8 @@ export const PRODUCT_TABLE_COLUMNS = [
 export const BUYER_FIELDS = [
   { name: "fullName", label: "Full Name", type: "text", required: true },
   { name: "city", label: "City", type: "text" },
-  { name: "payment", label: "Payment", type: "number", required: true },
-  { name: "buyingDate", label: "Buying Date", type: "date", required: true },
+  // { name: "payment", label: "Payment", type: "number", required: true },
+  // { name: "buyingDate", label: "Buying Date", type: "date", required: true },
 ];
 
 export const BUYER_TABLE_COLUMNS = [
@@ -89,4 +89,5 @@ export const PURCHASE_TABLE_COLUMNS = [
   { header: "Quantity", field: "quantity" },
   { header: "Dealer", field: "buyer" },
   { header: "Purchasing Date", field: "purchasingDate", sortable: true },
+  { header: "Total Amount", field: "totalAmount" },
 ];

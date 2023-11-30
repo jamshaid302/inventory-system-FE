@@ -5,13 +5,13 @@ import BarChart from "../../components/barChart";
 import Purchases from "../../services/purchases";
 
 const DashboardPage = () => {
-  const [totalPurchaseAmount, setTotalPurchaseAmount] = useState(0);
+  const [dashboardData, setDashobaordData] = useState({});
 
   useEffect(() => {
     const totalPurchasesSum = async () => {
       const res = await Purchases.getTotalPurchasesAmount();
       if (res) {
-        setTotalPurchaseAmount(res?.data?.totalPurchases);
+        setDashobaordData(res?.data);
       }
     };
     totalPurchasesSum();
@@ -25,7 +25,7 @@ const DashboardPage = () => {
             <div className="card rounded-3">
               <div className="card-body d-flex flex-column justify-content-center">
                 <h5 className="card-title">Total Purchase</h5>
-                <p className="card-text">{totalPurchaseAmount}</p>
+                <p className="card-text">{dashboardData?.totalPurchases}</p>
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@ const DashboardPage = () => {
             <div className="card rounded-3">
               <div className="card-body d-flex flex-column justify-content-center">
                 <h5 className="card-title">Stock Items</h5>
-                <p className="card-text">150,000</p>
+                <p className="card-text">{dashboardData?.itmeInStock}</p>
               </div>
             </div>
           </div>

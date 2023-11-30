@@ -16,6 +16,7 @@ export const productsRoutes = {
   patch: `${API_URL}/api/product`,
   add: `${API_URL}/api/product`,
   get: `${API_URL}/api/product`,
+  getAll: `${API_URL}/api/product/get-all`,
   delete: `${API_URL}/api/product`,
 };
 

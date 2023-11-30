@@ -26,9 +26,6 @@ const BaseTable = ({
   search = "",
 }) => {
   // const [globalFilter, setGlobalFilter] = useState(null);
-
-  console.log(onUpdate, "on delete", onDelete);
-
   const header = (
     <div className="table-header d-flex justify-content-between align-items-center flex-row">
       <span className="p-input-icon-left">
