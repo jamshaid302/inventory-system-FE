@@ -26,6 +26,7 @@ const ProductPage = () => {
     itemName: Yup.string().required(),
     buyingPrice: Yup.number().required(),
     sellingPrice: Yup.number().required(),
+    company: Yup.string(),
     unit: Yup.string().required(),
     quantity: Yup.number().required(),
     buyer: Yup.number().required(),

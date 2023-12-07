@@ -4,9 +4,12 @@ import { buyerRoutes, productsRoutes } from "../utils/routes";
 
 const Products = {
   add: (data) => {
+    const company =
+      data?.company.charAt(0).toUpperCase() + data?.company.slice(1);
     return apiRequests(productsRoutes.add, "POST", {
       itemName: data?.itemName,
       buyingPrice: Number(data?.buyingPrice),
+      company,
       sellingPrice: Number(data?.sellingPrice),
       unit: data?.unit,
       quantity: Number(data?.quantity),
@@ -17,9 +20,12 @@ const Products = {
 
   update: (data) => {
     const id = data?.id;
+    const company =
+      data?.company.charAt(0).toUpperCase() + data?.company.slice(1);
     return apiRequests(`${productsRoutes.patch}/${id}`, "PATCH", {
       itemName: data?.itemName,
       buyingPrice: Number(data?.buyingPrice),
+      company,
       sellingPrice: Number(data?.sellingPrice),
       unit: data?.unit,
       quantity: Number(data?.quantity),

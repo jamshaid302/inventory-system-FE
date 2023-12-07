@@ -94,6 +94,7 @@ const Modal = ({
                       value={data[field?.name] || ""}
                       onChange={handleChange(field?.name)}
                     >
+                      <option value="">Select an option</option>
                       {field?.options.map((option, optionIndex) => (
                         <option key={optionIndex} value={option.value}>
                           {option.text}

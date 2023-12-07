@@ -28,6 +28,7 @@ export const PRODUCT_FIELDS = [
     type: "number",
     required: true,
   },
+  { name: "company", label: "Comapny Name", type: "text", required: true },
   {
     name: "sellingPrice",
     label: "Selling Price",
@@ -57,9 +58,10 @@ export const PRODUCT_FIELDS = [
 ];
 
 export const PRODUCT_TABLE_COLUMNS = [
-  { header: "ID", field: "id", sortable: true },
+  { header: "ID", field: "id", sortable: true, hidden: true },
   { header: "Name", field: "itemName", sortable: true },
   { header: "Buying Price", field: "buyingPrice" },
+  { header: "Company", field: "company" },
   { header: "Selling Price", field: "sellingPrice" },
   { header: "Unit", field: "unit" },
   { header: "Quantity", field: "quantity" },
@@ -75,7 +77,7 @@ export const BUYER_FIELDS = [
 ];
 
 export const BUYER_TABLE_COLUMNS = [
-  { header: "ID", field: "id", sortable: true },
+  { header: "ID", field: "id", sortable: true, hidden: true },
   { header: "Full Name", field: "fullName", sortable: true },
   { header: "City", field: "city", sortable: false },
   { header: "BuyingDate", field: "buyingDate", sortable: false },
@@ -83,7 +85,7 @@ export const BUYER_TABLE_COLUMNS = [
 ];
 
 export const PURCHASE_TABLE_COLUMNS = [
-  { header: "ID", field: "id", sortable: true },
+  { header: "ID", field: "id", sortable: true, hidden: true },
   { header: "Item Name", field: "item", sortable: true },
   { header: "Per-unit Price", field: "perUnitPrice" },
   { header: "Quantity", field: "quantity" },

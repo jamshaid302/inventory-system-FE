@@ -113,6 +113,7 @@ const BaseTable = ({
             sortable={column.sortable}
             header={column.header}
             field={column.field}
+            hidden={column?.hidden || false}
           />
         ))}
         {onDelete && onUpdate ? (

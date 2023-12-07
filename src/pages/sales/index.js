@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import Products from "../../services/products";
+import { DashCircle, PlusCircle } from "react-bootstrap-icons";
+import "./style.css";
+import { v4 as uuidv4 } from "uuid";
+
+const initialItem = {
+  id: "",
+  uuid: uuidv4().slice(0, 8),
+  sellingPrice: 0,
+  quantity: 1,
+  discount: 0,
+  totalItemPrice: 0,
+};
 
 const SalesPage = () => {
+  const [selectedItems, setSelectedItems] = useState([initialItem]);
   const [products, setProducts] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([
-    { id: "", quantity: 1, totalItemPrice: 0 },
-  ]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -18,32 +28,143 @@ const SalesPage = () => {
     products();
   }, []);
 
+  useEffect(() => {
+    calculateInvoicePrice(selectedItems);
+  }, [selectedItems]);
+
   const handleChange = (e, index) => {
-    const selectedItemId = parseInt(e.target.value);
+    const selectedProductId = e?.target?.value;
     const selectedProduct = products.find(
-      (product) => product.id === selectedItemId
+      (pro) => pro?.id == Number(selectedProductId)
     );
+
+    // const updatedItem = {
+    //   ...initialItem,
+    //   id: selectedProduct?.id,
+    //   sellingPrice: selectedProduct?.sellingPrice,
+    //   totalItemPrice: calculateTotalItemPrice(initialItem),
+    // };
+
+    // updateItems(index, updatedItem);
 
     const updatedItems = [...selectedItems];
+    const newUUID = uuidv4().slice(0, 8);
+
     updatedItems[index] = {
-      ...selectedProduct,
+      id: selectedProduct?.id,
+      sellingPrice: selectedProduct?.sellingPrice,
+      uuid: newUUID,
       quantity: 1,
-      totalItemPrice: selectedProduct.price,
+      discount: 0,
+      totalItemPrice:
+        selectedProduct?.sellingPrice * Number(updatedItems[index].quantity) -
+        Number(updatedItems[index].discount),
     };
     setSelectedItems(updatedItems);
+  };
 
-    const newTotalPrice = updatedItems.reduce(
-      (sum, item) => sum + item.totalItemPrice,
+  const handleQuantityChange = (e, index) => {
+    const quantity = Number(e?.target?.value) || 0;
+    const updatedItem = {
+      ...selectedItems[index],
+      quantity,
+      totalItemPrice: calculateTotalItemPrice({
+        ...selectedItems[index],
+        quantity,
+      }),
+    };
+
+    updateItems(index, updatedItem);
+
+    // const updatedItems = [...selectedItems];
+    // updatedItems[index].quantity = Number(e.target?.value);
+    // updatedItems[index].totalItemPrice =
+    //   Number(updatedItems[index].sellingPrice) *
+    //     Number(updatedItems[index].quantity) -
+    //   Number(updatedItems[index].discount);
+    // setSelectedItems(updatedItems);
+  };
+
+  const handleDiscountChange = (e, index) => {
+    const discount = Number(e?.target?.value) || 0;
+    const updatedItem = {
+      ...selectedItems[index],
+      discount,
+      totalItemPrice: calculateTotalItemPrice({
+        ...selectedItems[index],
+        discount,
+      }),
+    };
+    updateItems(index, updatedItem);
+
+    // const updatedItems = [...selectedItems];
+    // updatedItems[index].discount = Number(e.target?.value);
+    // updatedItems[index].totalItemPrice =
+    //   Number(updatedItems[index].sellingPrice) *
+    //     Number(updatedItems[index].quantity) -
+    //   Number(e.target?.value);
+    // setSelectedItems(updatedItems);
+  };
+
+  const calculateTotalItemPrice = (item) => {
+    const { sellingPrice, quantity, discount } = item;
+    return sellingPrice * quantity - discount;
+  };
+
+  const updateItems = (index, updatedItem) => {
+    const updatedItems = [...selectedItems];
+    updatedItems[index] = updatedItem;
+    calculateInvoicePrice(updatedItems);
+    setSelectedItems(updatedItems);
+  };
+
+  const calculateInvoicePrice = (items) => {
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item?.totalItemPrice,
       0
     );
-    setTotalPrice(newTotalPrice);
+    setTotalPrice(totalAmount);
   };
+
+  const handleRemoveItem = (id) => {
+    if (id && selectedItems?.length > 1) {
+      setSelectedItems(selectedItems.filter((item) => item.uuid !== id));
+    } else {
+      setSelectedItems([initialItem]);
+    }
+  };
+
+  const handleSave = () => {
+    console.log("fsdfjshd", { ...selectedItems, invoiceTotal: totalPrice });
+  };
+
+  // const handleChange = (e, index) => {
+  //   const selectedItemId = parseInt(e.target.value);
+  //   const selectedProduct = products.find(
+  //     (product) => product.id === selectedItemId
+  //   );
+
+  //   const updatedItems = [...selectedItems];
+  //   updatedItems[index] = {
+  //     ...selectedProduct,
+  //     quantity: 1,
+  //     totalItemPrice: selectedProduct.price,
+  //   };
+  //   setSelectedItems(updatedItems);
+
+  //   const newTotalPrice = updatedItems.reduce(
+  //     (sum, item) => sum + item.totalItemPrice,
+  //     0
+  //   );
+  //   setTotalPrice(newTotalPrice);
+  // };
 
   return (
     <Layout>
       <div className="container d-flex flex-column">
-        <h2>Sale Form</h2>
-
+        <div className="heading">
+          <h2>Sale Form</h2>
+        </div>
         {selectedItems.map((item, index) => (
           <div
             key={index}
@@ -53,17 +174,18 @@ const SalesPage = () => {
               <label>Item</label>
               <select
                 className="form-select"
-                value={item.id}
+                value={item?.id}
                 onChange={(e) => handleChange(e, index)}
               >
                 <option value="">Select an item</option>
                 {products.map((product) => (
                   <option key={product.id} value={product.id}>
-                    {product.itemName}
+                    {product?.itemName}
                   </option>
                 ))}
               </select>
             </div>
+
             <div className="col-md-2 d-flex flex-column align-items-start">
               <label>Price</label>
               <input
@@ -73,42 +195,59 @@ const SalesPage = () => {
                 readOnly
               />
             </div>
+
             <div className="col-md-2 d-flex flex-column align-items-start">
               <label>Quantity</label>
               <input
                 type="number"
                 className="form-control"
-                value=""
-                // onChange={(e) => handleQuantityChange(e, index)}
+                value={item?.quantity}
+                onChange={(e) => handleQuantityChange(e, index)}
               />
             </div>
+
             <div className="col-md-2 d-flex flex-column align-items-start">
               <label>Discount</label>
               <input
                 type="number"
                 className="form-control"
-                value=""
-                // onChange={(e) => handleQuantityChange(e, index)}
+                value={item?.discount}
+                onChange={(e) => handleDiscountChange(e, index)}
               />
             </div>
-            <div className="col-md-2 d-flex flex-column align-items-start">
+
+            <div className="col-md-2 d-flex flex-column align-items-start ">
               <label>Total</label>
               <input
                 type="text"
                 className="form-control"
-                value={item.totalItemPrice}
+                value={item?.totalItemPrice}
                 readOnly
               />
             </div>
-            <div className="col-md-2 d-flex flex-column align-items-start">
-              <label>Remove</label>
-              <button
-                type="button"
-                className="btn btn-danger"
-                // onClick={() => handleRemoveItem(index)}
-              >
-                Remove
-              </button>
+
+            <div className="col-md-2 d-flex flex-column">
+              <span className="actions">
+                <PlusCircle
+                  className="circles"
+                  size={30}
+                  color="green"
+                  onClick={() => {
+                    if (selectedItems[selectedItems?.length - 1]?.id) {
+                      setSelectedItems([
+                        ...selectedItems,
+                        { ...initialItem, uuid: uuidv4().slice(0, 8) },
+                      ]);
+                    }
+                  }}
+                />
+                <DashCircle
+                  className="circles"
+                  size={30}
+                  color="red"
+                  onClick={() => handleRemoveItem(item?.uuid)}
+                />
+              </span>
             </div>
           </div>
         ))}
@@ -123,15 +262,16 @@ const SalesPage = () => {
           <div className="col-md-12">
             <button
               type="button"
-              className="btn btn-primary"
-              // onClick={() => setSelectedItems([...selectedItems, {}])}
+              className="btn btn-success ms-2"
+              onClick={() => window.print()}
             >
-              Add Item
-            </button>
-            <button type="button" className="btn btn-success ms-2">
               Print
             </button>
-            <button type="button" className="btn btn-info ms-2">
+            <button
+              type="button"
+              className="btn btn-info ms-2"
+              onClick={handleSave}
+            >
               Save
             </button>
           </div>

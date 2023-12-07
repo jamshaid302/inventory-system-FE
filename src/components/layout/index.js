@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "../sidebar";
-import Modal from "../modal";
 
 const Layout = ({ children }) => {
   // const [isModalVisible, setModalVisible] = useState(false);
