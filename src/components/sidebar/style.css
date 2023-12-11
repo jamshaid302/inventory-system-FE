@@ -1,3 +1,9 @@
 .cursor {
   cursor: pointer;
 }
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}

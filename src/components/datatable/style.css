@@ -1,8 +1,3 @@
-/* Center the table */
-.table-center {
-  padding: 10px;
-}
-
 .table-minimize-space {
   margin: 0;
 }
@@ -28,6 +23,10 @@
   margin-bottom: 0;
 }
 
+/* .p-datatable .p-datatable-tbody tr td {
+  padding-bottom: 0px;
+} */
+
 .p-dropdown-items {
   padding: 0px;
 }
@@ -35,5 +34,5 @@
 .p-datatable-scrollable-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
-  max-height: 470px; /* Adjust the max height as needed */
+  max-height: 470px;
 }

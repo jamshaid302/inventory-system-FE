@@ -1,6 +1,6 @@
 import moment from "moment";
 import { apiRequests } from "../utils/apiRequests";
-import { buyerRoutes, productsRoutes } from "../utils/routes";
+import { productsRoutes } from "../utils/routes";
 
 const Products = {
   add: (data) => {

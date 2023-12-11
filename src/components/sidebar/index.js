@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import {
   House,
-  Speedometer2,
-  Table,
-  Bootstrap,
-  Grid,
   People,
   Box,
-  Gear,
-  PlusCircle,
   Bag,
   Receipt,
+  Houses,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -31,7 +26,7 @@ const Sidebar = ({ children, openModal }) => {
     }
   }, []);
 
-  const logOut = () => {
+  const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
@@ -50,7 +45,7 @@ const Sidebar = ({ children, openModal }) => {
               </span>
             </a>
             <ul
-              className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+              className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start gap-2"
               id="menu"
             >
               {/* Dashboard */}
@@ -59,19 +54,19 @@ const Sidebar = ({ children, openModal }) => {
                   className="nav-link align-middle px-0 cursor"
                   onClick={() => navigate("/")}
                 >
-                  <Speedometer2 size={24} />{" "}
-                  <span className="ms-1 d-none d-sm-inline">Dashboard</span>
+                  <House size={24} />{" "}
+                  <span className="ms-1 d-none d-sm-inline">Home</span>
                 </a>
               </li>
 
-              {/* Products */}
+              {/* Items */}
               <li className="nav-item">
                 <a
                   className="nav-link align-middle px-0 cursor"
                   onClick={() => navigate("/products")}
                 >
                   <Box size={24} />{" "}
-                  <span className="ms-1 d-none d-sm-inline">Product</span>
+                  <span className="ms-1 d-none d-sm-inline">Items</span>
                 </a>
               </li>
 
@@ -235,7 +230,7 @@ const Sidebar = ({ children, openModal }) => {
                   <hr className="dropdown-divider" />
                 </li> */}
                 <li>
-                  <a className="dropdown-item cursor" onClick={logOut}>
+                  <a className="dropdown-item cursor" onClick={handleLogout}>
                     Sign out
                   </a>
                 </li>

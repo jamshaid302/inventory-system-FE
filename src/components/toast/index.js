@@ -17,7 +17,7 @@ const Toast = ({ message = "", showToast }) => {
     >
       <div
         id="myToast"
-        className="toast hide d-flex bg-primary text-white"
+        className="toast hide d-flex bg-success text-white"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"

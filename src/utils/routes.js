@@ -24,3 +24,7 @@ export const purchasesRoutes = {
   get: `${API_URL}/api/purchases`,
   getTotalPurchase: `${API_URL}/api/purchases`,
 };
+
+export const salesRoutes = {
+  add: `${API_URL}/api/sales`,
+};

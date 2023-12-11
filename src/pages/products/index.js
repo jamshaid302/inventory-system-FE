@@ -152,7 +152,7 @@ const ProductPage = () => {
         <BaseTable
           data={data}
           columns={PRODUCT_TABLE_COLUMNS}
-          buttonTitle="Add Product"
+          buttonTitle="Add Item"
           openModal={openModal}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
