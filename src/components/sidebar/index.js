@@ -6,6 +6,7 @@ import {
   Box,
   Bag,
   Receipt,
+  Cart,
   Houses,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
@@ -97,8 +98,18 @@ const Sidebar = ({ children, openModal }) => {
                   className="nav-link align-middle px-0 cursor"
                   onClick={() => navigate("/sales")}
                 >
-                  <Receipt size={24} />{" "}
+                  <Cart size={24} />{" "}
                   <span className="ms-1 d-none d-sm-inline">Sales</span>
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link align-middle px-0 cursor"
+                  onClick={() => navigate("/invoices")}
+                >
+                  <Receipt size={24} />{" "}
+                  <span className="ms-1 d-none d-sm-inline">Invoices</span>
                 </a>
               </li>
 

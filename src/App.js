@@ -8,6 +8,7 @@ import ProductPage from "./pages/products";
 import Buyers from "./pages/buyers";
 import PurchasesPage from "./pages/purchases";
 import SalesPage from "./pages/sales";
+import InvoicesPage from "./pages/invoices";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/buyers" element={<Buyers />} />
           <Route path="/purchases" element={<PurchasesPage />} />
           <Route path="/sales" element={<SalesPage />} />
+          <Route path="/invoices" element={<InvoicesPage />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
       </div>

@@ -22,6 +22,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 450px;
+  padding: 10px;
 }
 
 .total-price {

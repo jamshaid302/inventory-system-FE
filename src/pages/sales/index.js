@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/layout";
 import Products from "../../services/products";
 import Sales from "../../services/sales";
-import { DashCircle, PlusCircle } from "react-bootstrap-icons";
+import { PlusCircle, XCircle } from "react-bootstrap-icons";
 import "./style.css";
 import { v4 as uuidv4 } from "uuid";
 import Receipt from "../../components/PrintReceipt";
 import Toast from "../../components/toast";
+import Select from "react-select";
 
 const initialItem = {
   id: "",
@@ -47,36 +48,24 @@ const SalesPage = () => {
   }, [showToast]);
 
   const handleChange = (e, index) => {
-    const selectedProductId = e?.target?.value;
-    const selectedProduct = products.find(
-      (pro) => pro?.id == Number(selectedProductId)
-    );
+    const selectedProduct = products.find((pro) => pro?.id == Number(e?.value));
 
-    // const updatedItem = {
-    //   ...initialItem,
-    //   id: selectedProduct?.id,
-    //   sellingPrice: selectedProduct?.sellingPrice,
-    //   totalItemPrice: calculateTotalItemPrice(initialItem),
-    // };
-
-    // updateItems(index, updatedItem);
-
-    const updatedItems = [...selectedItems];
-    const newUUID = uuidv4().slice(0, 8);
-
-    updatedItems[index] = {
+    selectedItems[index] = {
+      ...selectedItems[index],
       id: selectedProduct?.id,
       sellingPrice: selectedProduct?.sellingPrice,
       name: selectedProduct?.itemName,
       company: selectedProduct?.company,
-      uuid: newUUID,
+      uuid: uuidv4().slice(0, 8),
       quantity: 1,
       discount: 0,
-      totalItemPrice:
-        selectedProduct?.sellingPrice * Number(updatedItems[index].quantity) -
-        Number(updatedItems[index].discount),
+      totalItemPrice: calculateTotalItemPrice({
+        sellingPrice: selectedProduct?.sellingPrice,
+        quantity: 1,
+        discount: 0,
+      }),
     };
-    setSelectedItems(updatedItems);
+    setSelectedItems([...selectedItems]);
   };
 
   const handleQuantityChange = (e, index) => {
@@ -89,16 +78,7 @@ const SalesPage = () => {
         quantity,
       }),
     };
-
     updateItems(index, updatedItem);
-
-    // const updatedItems = [...selectedItems];
-    // updatedItems[index].quantity = Number(e.target?.value);
-    // updatedItems[index].totalItemPrice =
-    //   Number(updatedItems[index].sellingPrice) *
-    //     Number(updatedItems[index].quantity) -
-    //   Number(updatedItems[index].discount);
-    // setSelectedItems(updatedItems);
   };
 
   const handleDiscountChange = (e, index) => {
@@ -112,14 +92,6 @@ const SalesPage = () => {
       }),
     };
     updateItems(index, updatedItem);
-
-    // const updatedItems = [...selectedItems];
-    // updatedItems[index].discount = Number(e.target?.value);
-    // updatedItems[index].totalItemPrice =
-    //   Number(updatedItems[index].sellingPrice) *
-    //     Number(updatedItems[index].quantity) -
-    //   Number(e.target?.value);
-    // setSelectedItems(updatedItems);
   };
 
   const calculateTotalItemPrice = (item) => {
@@ -187,30 +159,9 @@ const SalesPage = () => {
     }
   };
 
-  // const handleChange = (e, index) => {
-  //   const selectedItemId = parseInt(e.target.value);
-  //   const selectedProduct = products.find(
-  //     (product) => product.id === selectedItemId
-  //   );
-
-  //   const updatedItems = [...selectedItems];
-  //   updatedItems[index] = {
-  //     ...selectedProduct,
-  //     quantity: 1,
-  //     totalItemPrice: selectedProduct.price,
-  //   };
-  //   setSelectedItems(updatedItems);
-
-  //   const newTotalPrice = updatedItems.reduce(
-  //     (sum, item) => sum + item.totalItemPrice,
-  //     0
-  //   );
-  //   setTotalPrice(newTotalPrice);
-  // };
-
   return (
     <Layout>
-      <div className="container d-flex flex-column">
+      <div className="d-flex flex-column h-100">
         <div className="heading">
           <h2>Sale Form</h2>
         </div>
@@ -218,12 +169,12 @@ const SalesPage = () => {
           {selectedItems.map((item, index) => (
             <div
               key={index}
-              ref={index === selectedItems.length - 1 ? lastRowRef : null} // Set ref for the last row
+              ref={index === selectedItems.length - 1 ? lastRowRef : null}
               className="row mt-4 mb-4 d-flex flex-row align-items-center"
             >
-              <div className="col-md-2 d-flex flex-column align-items-start">
-                <label>Item</label>
-                <select
+              <div className="col-md-2 d-flex flex-column">
+                <label className="d-flex">Item</label>
+                {/* <select
                   className="form-select"
                   value={item?.id}
                   onChange={(e) => handleChange(e, index)}
@@ -234,7 +185,24 @@ const SalesPage = () => {
                       {product?.itemName} ({product?.company})
                     </option>
                   ))}
-                </select>
+                </select> */}
+                <Select
+                  options={products.map((prod) => ({
+                    value: prod?.id,
+                    label: `${prod?.itemName} (${prod?.company})`,
+                  }))}
+                  placeholder="Select Item"
+                  value={
+                    selectedItems[index]?.id
+                      ? {
+                          value: selectedItems[index]?.id,
+                          label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
+                        }
+                      : null
+                  }
+                  onChange={(e) => handleChange(e, index)}
+                  isSearchable={true}
+                />
               </div>
 
               <div className="col-md-2 d-flex flex-column align-items-start">
@@ -298,7 +266,7 @@ const SalesPage = () => {
                     data-toggle="tooltip"
                     title="Remove"
                   >
-                    <DashCircle
+                    <XCircle
                       className="circles"
                       size={30}
                       color="red"

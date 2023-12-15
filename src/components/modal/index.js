@@ -43,12 +43,13 @@ const Modal = ({
     formData(initializeFormData());
   }, [fields, dataToUpdate]);
 
-  const handleChange = (name) => (e) => {
-    let type = fields?.find((item) => name === item?.name).type;
+  const handleChange = (e) => {
+    let type = fields?.find((item) => e.target.name === item?.name).type;
 
     formData((prev) => ({
       ...prev,
-      [name]: type === "date" ? moment(e.target.value) : e.target.value,
+      [e.target.name]:
+        type === "date" ? moment(e.target.value) : e.target.value,
     }));
   };
 
@@ -92,7 +93,7 @@ const Modal = ({
                       name={field?.name}
                       required={field?.required}
                       value={data[field?.name] || ""}
-                      onChange={handleChange(field?.name)}
+                      onChange={handleChange}
                     >
                       <option value="">Select an option</option>
                       {field?.options.map((option, optionIndex) => (
@@ -113,7 +114,7 @@ const Modal = ({
                           ? data[field?.name] || ""
                           : moment(data[field?.name]).format("YYYY-MM-DD")
                       }
-                      onChange={handleChange(field?.name)}
+                      onChange={handleChange}
                       placeholder={`Enter ${field?.label}`}
                     />
                   )}
