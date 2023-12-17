@@ -93,3 +93,11 @@ export const PURCHASE_TABLE_COLUMNS = [
   { header: "Purchasing Date", field: "purchasingDate", sortable: true },
   { header: "Total Amount", field: "totalAmount" },
 ];
+
+export const INVOICES_TABLE_COLUMNS = [
+  { header: "ID", field: "id", sortable: true, hidden: true },
+  { header: "Invoice #", field: "invoiceNumber", sortable: true },
+  { header: "Date", field: "date", sortable: false },
+  { header: "No. of Items", field: "items", sortable: false },
+  { header: "Inv Total", field: "invoiceTotal", sortable: true },
+];

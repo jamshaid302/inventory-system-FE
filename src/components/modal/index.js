@@ -13,6 +13,8 @@ const Modal = ({
 }) => {
   const [data, formData] = useState({});
 
+  console.log("-----", dataToUpdate);
+
   useEffect(() => {
     const initializeFormData = () => {
       const initialValues = {};

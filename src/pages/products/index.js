@@ -98,6 +98,7 @@ const ProductPage = () => {
 
   const handleProductSubmit = async (formData) => {
     try {
+      console.log("form data", formData);
       await schema.validate(formData, { abortEarly: false });
       let res;
       if (formData?.id) {

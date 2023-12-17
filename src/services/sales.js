@@ -10,6 +10,13 @@ const Sales = {
     };
     return apiRequests(salesRoutes.add, "POST", metaData);
   },
+
+  get: (pageIndex, rowsPerPage, search = "") => {
+    return apiRequests(
+      `${salesRoutes.get}?start=${pageIndex}&limit=${rowsPerPage}&search=${search}`,
+      "GET"
+    );
+  },
 };
 
 export default Sales;

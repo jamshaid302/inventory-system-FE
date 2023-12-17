@@ -17,6 +17,7 @@ const BaseTable = ({
   buttonTitle = "",
   openModal,
   onDelete,
+  onView,
   onUpdate,
   setRows,
   setFirst,
@@ -56,17 +57,27 @@ const BaseTable = ({
   const actionBodyTemplate = (rowData) => {
     return (
       <React.Fragment>
-        <Button
-          icon="pi pi-trash"
-          className="p-button-rounded p-button-warning"
-          style={{ marginRight: "5px" }}
-          onClick={() => onDelete(rowData?.id)}
-        />
-        <Button
-          icon="pi pi-book"
-          className="p-button-rounded p-dt-tooltip"
-          onClick={() => onUpdate(rowData)}
-        />
+        {onView ? (
+          <Button
+            icon="pi pi-eye"
+            className="p-button-rounded p-dt-tooltip"
+            onClick={() => onView(rowData)}
+          />
+        ) : (
+          <>
+            <Button
+              icon="pi pi-trash"
+              className="p-button-rounded p-button-warning"
+              style={{ marginRight: "5px" }}
+              onClick={() => onDelete(rowData?.id)}
+            />
+            <Button
+              icon="pi pi-book"
+              className="p-button-rounded p-dt-tooltip"
+              onClick={() => onUpdate(rowData)}
+            />
+          </>
+        )}
         {/* <Tooltip
           target=".p-dt-tooltip"
           content="Edit"
@@ -116,7 +127,7 @@ const BaseTable = ({
             hidden={column?.hidden || false}
           />
         ))}
-        {onDelete && onUpdate ? (
+        {onDelete || onUpdate || onView ? (
           <Column
             body={actionBodyTemplate}
             className="p-dt-tooltip"

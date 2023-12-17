@@ -1,10 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
+import Sales from "../../services/sales";
+import moment from "moment";
+import BaseTable from "../../components/datatable";
+import { INVOICES_TABLE_COLUMNS } from "../../utils/constants";
+import InvoiceModal from "../../components/InvoiceModal";
 
 const InvoicesPage = () => {
+  const [invoices, setInvoices] = useState([]);
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+  const [search, setSearch] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await Sales.get(first, rows, search);
+      const data = res?.data?.invoices.map((item) => ({
+        ...item,
+        date: moment(item?.date).format("MMM-DD-YYYY"),
+        items: item?.salesItem?.length,
+      }));
+      setInvoices({ data, totalRecords: res?.data?.count });
+    };
+    fetchData();
+  }, [first, rows, search]);
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleView = (invoice) => {
+    setSelectedInvoice(invoice);
+    setModalVisible(true);
+  };
+
   return (
     <Layout>
-      <h1>Invoices</h1>
+      <div>
+        <BaseTable
+          data={invoices}
+          columns={INVOICES_TABLE_COLUMNS}
+          setFirst={setFirst}
+          setRows={setRows}
+          onView={handleView}
+          rows={rows}
+          first={first}
+          setSearch={setSearch}
+          search={search}
+        />
+      </div>
+      <div>
+        <InvoiceModal
+          visible={isModalVisible}
+          onHide={closeModal}
+          invoice={selectedInvoice}
+        />
+      </div>
     </Layout>
   );
 };
