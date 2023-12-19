@@ -21,6 +21,7 @@ const ProductPage = () => {
   const [search, setSearch] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
+  const [isEditMode, setEditMode] = useState(false);
 
   const schema = Yup.object().shape({
     itemName: Yup.string().required(),
@@ -67,10 +68,8 @@ const ProductPage = () => {
       const updatedFields = await Promise.all(
         PRODUCT_FIELDS.map(async (field) => fetchBuyersForField(field))
       );
-
       setFormFields(updatedFields);
     };
-
     fetchDataAndUpdateState();
   }, []);
 
@@ -83,6 +82,7 @@ const ProductPage = () => {
   };
 
   const openModal = () => {
+    setEditMode(false);
     setModalVisible(true);
   };
 
@@ -98,7 +98,6 @@ const ProductPage = () => {
 
   const handleProductSubmit = async (formData) => {
     try {
-      console.log("form data", formData);
       await schema.validate(formData, { abortEarly: false });
       let res;
       if (formData?.id) {
@@ -120,6 +119,7 @@ const ProductPage = () => {
 
   const handleUpdate = async (formData) => {
     setModalVisible(true);
+    setEditMode(true);
     setDataToUpdate(formData);
   };
 
@@ -171,8 +171,9 @@ const ProductPage = () => {
           onHide={closeModal}
           fields={formFields}
           onSubmit={handleProductSubmit}
-          title="Add Product"
+          title={isEditMode ? "Edit Product" : "Add Product"}
           dataToUpdate={dataToUpdate}
+          isEditMode={isEditMode}
         />
       </div>
       {showMessageToast()}

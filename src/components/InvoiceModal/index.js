@@ -67,7 +67,9 @@ const InvoiceModal = ({ visible, onHide, invoice }) => {
                     style={{ borderBottom: "1px solid #000" }}
                     className="table-heading"
                   >
-                    <td>{item.quantity}</td>
+                    <td>{`${
+                      item.quantity
+                    } (${item?.product?.unit[0].toUpperCase()})`}</td>
                     <td>{item?.product?.itemName}</td>
                     <td>{item?.product?.company}</td>
                     <td>{item?.product?.sellingPrice}</td>

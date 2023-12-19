@@ -19,6 +19,7 @@ const Buyers = () => {
   const [search, setSearch] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
+  const [isEditMode, setEditMode] = useState(false);
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required(),
@@ -48,6 +49,7 @@ const Buyers = () => {
   }, [reloadPage, first, rows, search]);
 
   const openModal = () => {
+    setEditMode(false);
     setModalVisible(true);
   };
 
@@ -84,6 +86,7 @@ const Buyers = () => {
 
   const handleUpdate = async (formData) => {
     setModalVisible(true);
+    setEditMode(true);
     setDataToUpdate(formData);
   };
 
@@ -137,6 +140,7 @@ const Buyers = () => {
           onSubmit={handleProductSubmit}
           title="Add Buyer"
           dataToUpdate={dataToUpdate}
+          isEditMode={isEditMode}
         />
       </div>
       {showMessageToast()}

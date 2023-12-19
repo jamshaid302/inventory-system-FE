@@ -10,40 +10,43 @@ const Modal = ({
   fields,
   onSubmit,
   dataToUpdate = {},
+  isEditMode = false,
 }) => {
   const [data, formData] = useState({});
-
-  console.log("-----", dataToUpdate);
 
   useEffect(() => {
     const initializeFormData = () => {
       const initialValues = {};
       fields.forEach((field) => {
         if (field.type === "date") {
-          initialValues[field.name] = dataToUpdate[field.name]
-            ? moment(dataToUpdate[field.name])
-            : moment();
+          initialValues[field.name] =
+            dataToUpdate[field.name] && isEditMode
+              ? moment(dataToUpdate[field.name])
+              : moment();
         } else if (field?.type === "select") {
           if (field?.name === "buyer") {
-            initialValues[field.name] = dataToUpdate[field.name]
-              ? dataToUpdate.buyerId
-              : "";
+            initialValues[field.name] =
+              dataToUpdate[field.name] && isEditMode
+                ? dataToUpdate.buyerId
+                : "";
           } else if (field?.name === "unit") {
-            initialValues[field.name] = dataToUpdate[field.name]
-              ? dataToUpdate.unit
-              : "";
+            initialValues[field.name] =
+              dataToUpdate[field.name] && isEditMode ? dataToUpdate.unit : "";
           }
         } else {
-          initialValues[field.name] = dataToUpdate
-            ? dataToUpdate[field.name]
-            : "";
+          initialValues[field.name] =
+            dataToUpdate && isEditMode ? dataToUpdate[field.name] : "";
         }
       });
       return initialValues;
     };
 
-    formData(initializeFormData());
-  }, [fields, dataToUpdate]);
+    if (!dataToUpdate || Object.keys(dataToUpdate).length === 0) {
+      formData({});
+    } else {
+      formData(initializeFormData());
+    }
+  }, [fields, dataToUpdate, isEditMode]);
 
   const handleChange = (e) => {
     let type = fields?.find((item) => e.target.name === item?.name).type;
