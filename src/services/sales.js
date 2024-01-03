@@ -17,6 +17,10 @@ const Sales = {
       "GET"
     );
   },
+
+  getSalesTotal: () => {
+    return apiRequests(salesRoutes.getTotals, "GET");
+  },
 };
 
 export default Sales;
