@@ -191,7 +191,7 @@ const SalesPage = () => {
                     value: prod?.id,
                     label: `${prod?.itemName} (${prod?.company})`,
                   }))}
-                  placeholder="Select Item"
+                  placeholder="Select an Item"
                   value={
                     selectedItems[index]?.id
                       ? {
@@ -247,7 +247,7 @@ const SalesPage = () => {
 
               <div className="col-md-2 d-flex flex-column">
                 <span className="actions">
-                  <span
+                  {/* <span
                     className="d-inline-block"
                     tabIndex="0"
                     data-toggle="tooltip"
@@ -259,7 +259,7 @@ const SalesPage = () => {
                       color="green"
                       onClick={handleAddItem}
                     />
-                  </span>
+                  </span> */}
                   <span
                     className="d-inline-block"
                     tabIndex="0"

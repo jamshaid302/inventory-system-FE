@@ -8,6 +8,7 @@ import {
   Receipt,
   Cart,
   Houses,
+  ArrowReturnLeft,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -113,6 +114,16 @@ const Sidebar = ({ children, openModal }) => {
                 </a>
               </li>
 
+              <li className="nav-item">
+                <a
+                  className="nav-link align-middle px-0 cursor"
+                  onClick={() => navigate("/returns")}
+                >
+                  <ArrowReturnLeft size={24} />{" "}
+                  <span className="ms-1 d-none d-sm-inline">Returns</span>
+                </a>
+              </li>
+
               {/* Settings */}
               {/* <li className="nav-item">
                 <a href="#" className="nav-link align-middle px-0">
@@ -213,7 +224,7 @@ const Sidebar = ({ children, openModal }) => {
                 aria-expanded="false"
               >
                 <img
-                  src="https://github.com/mdo.png"
+                  src="/images/user1.jpg"
                   alt="hugenerd"
                   width="30"
                   height="30"

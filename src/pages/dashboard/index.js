@@ -22,6 +22,7 @@ const DashboardPage = () => {
             ...prev,
             salesTotal: salesRes?.data?.salesTotal,
             currentDaySalesTotal: salesRes?.data?.currentDaySalesTotal,
+            monthlySalesTotal: salesRes?.data?.eachMonthSalesTotal,
           }));
         }
       } catch (error) {
@@ -72,7 +73,7 @@ const DashboardPage = () => {
           </div>
         </div>
         <div className="barChart">
-          <BarChart />
+          <BarChart monthlySalesTotal={dashboardData?.monthlySalesTotal} />
         </div>
       </div>
     </Layout>

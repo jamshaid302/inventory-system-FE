@@ -21,16 +21,17 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = () => {
+const BarChart = ({ monthlySalesTotal }) => {
   const data = {
     labels: YEARS_LIST,
     datasets: [
       {
         label: "Monthly Sales",
-        data: [
-          10000, 1500, 12000, 1800, 900, 2000, 4000, 5000, 6000, 7000, 8000,
-          8500,
-        ],
+        // data: [
+        //   10000, 1500, 12000, 1800, 900, 2000, 4000, 5000, 6000, 7000, 8000,
+        //   8500,
+        // ],
+        data: monthlySalesTotal,
         backgroundColor: [
           "rgba(255, 99, 132, 0.6)",
           "rgba(54, 162, 235, 0.6)",
