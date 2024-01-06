@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./style.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
@@ -6,7 +6,7 @@ import "primereact/resources/primereact.css";
 // import "primeflex/primeflex.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Tooltip } from "primereact/tooltip";
+// import { Tooltip } from "primereact/tooltip";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Paginator } from "primereact/paginator";
@@ -103,7 +103,7 @@ const BaseTable = ({
         // globalFilter={globalFilter}
         header={header}
         // filterDisplay="row"
-        emptyMessage="No Items found."
+        emptyMessage="No data found."
         className="table-minimize-space"
         scrollHeight={"460px"}
         scrollable

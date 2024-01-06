@@ -57,6 +57,13 @@ export const PRODUCT_FIELDS = [
   { name: "buyingDate", label: "Buying Date", type: "date", required: true },
 ];
 
+export const BUYER_FIELDS = [
+  { name: "fullName", label: "Full Name", type: "text", required: true },
+  { name: "city", label: "City", type: "text" },
+  // { name: "payment", label: "Payment", type: "number", required: true },
+  // { name: "buyingDate", label: "Buying Date", type: "date", required: true },
+];
+
 export const PRODUCT_TABLE_COLUMNS = [
   { header: "ID", field: "id", sortable: true, hidden: true },
   { header: "Name", field: "itemName", sortable: true },
@@ -67,13 +74,6 @@ export const PRODUCT_TABLE_COLUMNS = [
   { header: "Quantity", field: "quantity" },
   { header: "Dealer", field: "buyer" },
   { header: "BuyingDate", field: "buyingDate", sortable: true },
-];
-
-export const BUYER_FIELDS = [
-  { name: "fullName", label: "Full Name", type: "text", required: true },
-  { name: "city", label: "City", type: "text" },
-  // { name: "payment", label: "Payment", type: "number", required: true },
-  // { name: "buyingDate", label: "Buying Date", type: "date", required: true },
 ];
 
 export const BUYER_TABLE_COLUMNS = [

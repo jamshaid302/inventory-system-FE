@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 import Receipt from "../../components/PrintReceipt";
 import Toast from "../../components/toast";
 import Select from "react-select";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 
 const initialItem = {
   id: "",
@@ -247,7 +249,7 @@ const SalesPage = () => {
 
               <div className="col-md-2 d-flex flex-column">
                 <span className="actions">
-                  {/* <span
+                  <span
                     className="d-inline-block"
                     tabIndex="0"
                     data-toggle="tooltip"
@@ -259,7 +261,7 @@ const SalesPage = () => {
                       color="green"
                       onClick={handleAddItem}
                     />
-                  </span> */}
+                  </span>
                   <span
                     className="d-inline-block"
                     tabIndex="0"
