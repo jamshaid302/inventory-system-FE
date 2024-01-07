@@ -9,7 +9,6 @@ import Buyers from "./pages/buyers";
 import PurchasesPage from "./pages/purchases";
 import SalesPage from "./pages/sales";
 import InvoicesPage from "./pages/invoices";
-import ItemsReturnPage from "./pages/returns";
 
 function App() {
   return (
@@ -24,7 +23,6 @@ function App() {
           <Route path="/purchases" element={<PurchasesPage />} />
           <Route path="/sales" element={<SalesPage />} />
           <Route path="/invoices" element={<InvoicesPage />} />
-          <Route path="/returns" element={<ItemsReturnPage />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
       </div>

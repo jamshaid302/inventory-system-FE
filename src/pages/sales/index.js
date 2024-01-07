@@ -28,6 +28,7 @@ const SalesPage = () => {
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
   const [isReceiptVisible, setIsReceiptVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState("sales");
 
   useEffect(() => {
     const products = async () => {
@@ -71,6 +72,8 @@ const SalesPage = () => {
   };
 
   const handleQuantityChange = (e, index) => {
+    if (Number(e?.target?.value) < 1) return;
+
     const quantity = Number(e?.target?.value) || 0;
     const updatedItem = {
       ...selectedItems[index],
@@ -84,6 +87,8 @@ const SalesPage = () => {
   };
 
   const handleDiscountChange = (e, index) => {
+    if (Number(e?.target?.value) < 0) return;
+
     const discount = Number(e?.target?.value) || 0;
     const updatedItem = {
       ...selectedItems[index],
@@ -148,11 +153,20 @@ const SalesPage = () => {
   const handleSave = async () => {
     try {
       if (selectedItems[selectedItems?.length - 1]?.id) {
-        const res = await Sales.add(selectedItems, totalPrice);
-        if (res?.data?.invoice) {
-          setMessage(res?.data?.message);
-          setShowToast(true);
-          setSelectedItems([initialItem]);
+        if (activeTab === "sales") {
+          const res = await Sales.add(selectedItems, totalPrice);
+          if (res?.data?.invoice) {
+            setMessage(res?.data?.message);
+            setShowToast(true);
+            setSelectedItems([initialItem]);
+          }
+        } else {
+          const res = await Sales.update(selectedItems, totalPrice);
+          if (res?.data?.message) {
+            setMessage(res?.data?.message);
+            setShowToast(true);
+            setSelectedItems([initialItem]);
+          }
         }
       }
     } catch (error) {
@@ -161,130 +175,239 @@ const SalesPage = () => {
     }
   };
 
+  const handleTabSelect = (selectedTab) => {
+    setActiveTab(selectedTab);
+  };
+
   return (
     <Layout>
       <div className="d-flex flex-column h-100">
-        <div className="heading">
+        {/* <div className="heading">
           <h2>Sale Form</h2>
-        </div>
-        <div className="scrollable-content">
-          {selectedItems.map((item, index) => (
-            <div
-              key={index}
-              ref={index === selectedItems.length - 1 ? lastRowRef : null}
-              className="row mt-4 mb-4 d-flex flex-row align-items-center"
-            >
-              <div className="col-md-2 d-flex flex-column">
-                <label className="d-flex">Item</label>
-                {/* <select
-                  className="form-select"
-                  value={item?.id}
-                  onChange={(e) => handleChange(e, index)}
-                >
-                  <option value="">Select an item</option>
-                  {products.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product?.itemName} ({product?.company})
-                    </option>
-                  ))}
-                </select> */}
-                <Select
-                  options={products.map((prod) => ({
-                    value: prod?.id,
-                    label: `${prod?.itemName} (${prod?.company})`,
-                  }))}
-                  placeholder="Select an Item"
-                  value={
-                    selectedItems[index]?.id
-                      ? {
-                          value: selectedItems[index]?.id,
-                          label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
+        </div> */}
+
+        <div className="tabs">
+          <Tabs
+            defaultActiveKey="sales"
+            id="fill-tab-example"
+            className=""
+            fill
+            onSelect={handleTabSelect}
+          >
+            <Tab eventKey="sales" title="Sales Form">
+              <div className="scrollable-content">
+                {selectedItems.map((item, index) => (
+                  <div
+                    key={index}
+                    ref={index === selectedItems.length - 1 ? lastRowRef : null}
+                    className="row mt-4 mb-4 d-flex flex-row align-items-center"
+                  >
+                    <div className="col-md-2 d-flex flex-column">
+                      <label className="d-flex">Item</label>
+                      <Select
+                        options={products.map((prod) => ({
+                          value: prod?.id,
+                          label: `${prod?.itemName} (${prod?.company})`,
+                        }))}
+                        placeholder="Select an Item"
+                        value={
+                          selectedItems[index]?.id
+                            ? {
+                                value: selectedItems[index]?.id,
+                                label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
+                              }
+                            : null
                         }
-                      : null
-                  }
-                  onChange={(e) => handleChange(e, index)}
-                  isSearchable={true}
-                />
-              </div>
+                        onChange={(e) => handleChange(e, index)}
+                        isSearchable={true}
+                      />
+                    </div>
 
-              <div className="col-md-2 d-flex flex-column align-items-start">
-                <label>Price</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={item?.sellingPrice}
-                  readOnly
-                />
-              </div>
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Price</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={item?.sellingPrice}
+                        readOnly
+                      />
+                    </div>
 
-              <div className="col-md-2 d-flex flex-column align-items-start">
-                <label>Quantity</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={item?.quantity}
-                  onChange={(e) => handleQuantityChange(e, index)}
-                />
-              </div>
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Quantity</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={item?.quantity}
+                        onChange={(e) => handleQuantityChange(e, index)}
+                      />
+                    </div>
 
-              <div className="col-md-2 d-flex flex-column align-items-start">
-                <label>Discount</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={item?.discount}
-                  onChange={(e) => handleDiscountChange(e, index)}
-                />
-              </div>
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Discount</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={item?.discount}
+                        onChange={(e) => handleDiscountChange(e, index)}
+                      />
+                    </div>
 
-              <div className="col-md-2 d-flex flex-column align-items-start ">
-                <label>Total</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={item?.totalItemPrice}
-                  readOnly
-                />
-              </div>
+                    <div className="col-md-2 d-flex flex-column align-items-start ">
+                      <label>Total</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={item?.totalItemPrice}
+                        readOnly
+                      />
+                    </div>
 
-              <div className="col-md-2 d-flex flex-column">
-                <span className="actions">
-                  <span
-                    className="d-inline-block"
-                    tabIndex="0"
-                    data-toggle="tooltip"
-                    title="Add Item"
+                    <div className="col-md-2 d-flex flex-column">
+                      <span className="actions">
+                        <span
+                          className="d-inline-block"
+                          tabIndex="0"
+                          data-toggle="tooltip"
+                          title="Add Item"
+                        >
+                          <PlusCircle
+                            className="circles"
+                            size={30}
+                            color="green"
+                            onClick={handleAddItem}
+                          />
+                        </span>
+                        <span
+                          className="d-inline-block"
+                          tabIndex="0"
+                          data-toggle="tooltip"
+                          title="Remove"
+                        >
+                          <XCircle
+                            className="circles"
+                            size={30}
+                            color="red"
+                            onClick={() => handleRemoveItem(item?.uuid)}
+                          />
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Tab>
+            <Tab eventKey="returns" title="Returns">
+              <div className="scrollable-content">
+                {selectedItems.map((item, index) => (
+                  <div
+                    key={index}
+                    ref={index === selectedItems.length - 1 ? lastRowRef : null}
+                    className="row mt-4 mb-4 d-flex flex-row align-items-center"
                   >
-                    <PlusCircle
-                      className="circles"
-                      size={30}
-                      color="green"
-                      onClick={handleAddItem}
-                    />
-                  </span>
-                  <span
-                    className="d-inline-block"
-                    tabIndex="0"
-                    data-toggle="tooltip"
-                    title="Remove"
-                  >
-                    <XCircle
-                      className="circles"
-                      size={30}
-                      color="red"
-                      onClick={() => handleRemoveItem(item?.uuid)}
-                    />
-                  </span>
-                </span>
+                    <div className="col-md-2 d-flex flex-column">
+                      <label className="d-flex">Item</label>
+                      <Select
+                        options={products.map((prod) => ({
+                          value: prod?.id,
+                          label: `${prod?.itemName} (${prod?.company})`,
+                        }))}
+                        placeholder="Select an Item"
+                        value={
+                          selectedItems[index]?.id
+                            ? {
+                                value: selectedItems[index]?.id,
+                                label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
+                              }
+                            : null
+                        }
+                        onChange={(e) => handleChange(e, index)}
+                        isSearchable={true}
+                      />
+                    </div>
+
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Price</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={item?.sellingPrice}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Quantity</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={item?.quantity}
+                        onChange={(e) => handleQuantityChange(e, index)}
+                      />
+                    </div>
+
+                    <div className="col-md-2 d-flex flex-column align-items-start">
+                      <label>Discount</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={item?.discount}
+                        disabled
+                        onChange={(e) => handleDiscountChange(e, index)}
+                      />
+                    </div>
+
+                    <div className="col-md-2 d-flex flex-column align-items-start ">
+                      <label>Total</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={item?.totalItemPrice}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-2 d-flex flex-column">
+                      <span className="actions">
+                        <span
+                          className="d-inline-block"
+                          tabIndex="0"
+                          data-toggle="tooltip"
+                          title="Add Item"
+                        >
+                          <PlusCircle
+                            className="circles"
+                            size={30}
+                            color="green"
+                            onClick={handleAddItem}
+                          />
+                        </span>
+                        <span
+                          className="d-inline-block"
+                          tabIndex="0"
+                          data-toggle="tooltip"
+                          title="Remove"
+                        >
+                          <XCircle
+                            className="circles"
+                            size={30}
+                            color="red"
+                            onClick={() => handleRemoveItem(item?.uuid)}
+                          />
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            </Tab>
+          </Tabs>
         </div>
 
         <div className="total-price sticky">
           <div className="row">
             <div className="col-md-12">
-              <strong>Total Price: ${totalPrice}</strong>
+              <strong>Total Price: {totalPrice}.Rs</strong>
             </div>
           </div>
 
@@ -302,7 +425,7 @@ const SalesPage = () => {
                 className="btn btn-primary w-25"
                 onClick={handleSave}
               >
-                Save
+                {activeTab === "returns" ? "Return" : "Save"}
               </button>
             </div>
           </div>

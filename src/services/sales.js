@@ -1,4 +1,3 @@
-import moment from "moment";
 import { apiRequests } from "../utils/apiRequests";
 import { salesRoutes } from "../utils/routes";
 
@@ -9,6 +8,14 @@ const Sales = {
       invoiceTotal: total,
     };
     return apiRequests(salesRoutes.add, "POST", metaData);
+  },
+
+  update: (data, total) => {
+    const metaData = {
+      data,
+      invoiceTotal: total,
+    };
+    return apiRequests(salesRoutes.update, "POST", metaData);
   },
 
   get: (pageIndex, rowsPerPage, search = "") => {

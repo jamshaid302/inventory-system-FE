@@ -8,7 +8,6 @@ import {
   Receipt,
   Cart,
   Houses,
-  ArrowReturnLeft,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -111,16 +110,6 @@ const Sidebar = ({ children, openModal }) => {
                 >
                   <Receipt size={24} />{" "}
                   <span className="ms-1 d-none d-sm-inline">Invoices</span>
-                </a>
-              </li>
-
-              <li className="nav-item">
-                <a
-                  className="nav-link align-middle px-0 cursor"
-                  onClick={() => navigate("/returns")}
-                >
-                  <ArrowReturnLeft size={24} />{" "}
-                  <span className="ms-1 d-none d-sm-inline">Returns</span>
                 </a>
               </li>
 
