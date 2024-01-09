@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import Receipt from "../../components/PrintReceipt";
 import Toast from "../../components/toast";
 import Select from "react-select";
+import Button from "react-bootstrap/Button";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
@@ -69,10 +70,15 @@ const SalesPage = () => {
       }),
     };
     setSelectedItems([...selectedItems]);
+
+    if (selectedProduct?.id && index === selectedItems.length - 1) {
+      handleAddItem();
+    }
   };
 
   const handleQuantityChange = (e, index) => {
     if (Number(e?.target?.value) < 1) return;
+    if (index === selectedItems.length - 1) return;
 
     const quantity = Number(e?.target?.value) || 0;
     const updatedItem = {
@@ -88,6 +94,7 @@ const SalesPage = () => {
 
   const handleDiscountChange = (e, index) => {
     if (Number(e?.target?.value) < 0) return;
+    if (index === selectedItems.length - 1) return;
 
     const discount = Number(e?.target?.value) || 0;
     const updatedItem = {
@@ -265,7 +272,7 @@ const SalesPage = () => {
 
                     <div className="col-md-2 d-flex flex-column">
                       <span className="actions">
-                        <span
+                        {/* <span
                           className="d-inline-block"
                           tabIndex="0"
                           data-toggle="tooltip"
@@ -277,8 +284,8 @@ const SalesPage = () => {
                             color="green"
                             onClick={handleAddItem}
                           />
-                        </span>
-                        <span
+                        </span> */}
+                        {/* <span
                           className="d-inline-block"
                           tabIndex="0"
                           data-toggle="tooltip"
@@ -290,7 +297,13 @@ const SalesPage = () => {
                             color="red"
                             onClick={() => handleRemoveItem(item?.uuid)}
                           />
-                        </span>
+                        </span> */}
+                        <Button
+                          variant="danger"
+                          onClick={() => handleRemoveItem(item?.uuid)}
+                        >
+                          Remove
+                        </Button>
                       </span>
                     </div>
                   </div>
@@ -369,7 +382,7 @@ const SalesPage = () => {
 
                     <div className="col-md-2 d-flex flex-column">
                       <span className="actions">
-                        <span
+                        {/* <span
                           className="d-inline-block"
                           tabIndex="0"
                           data-toggle="tooltip"
@@ -394,7 +407,13 @@ const SalesPage = () => {
                             color="red"
                             onClick={() => handleRemoveItem(item?.uuid)}
                           />
-                        </span>
+                        </span> */}
+                        <Button
+                          variant="danger"
+                          onClick={() => handleRemoveItem(item?.uuid)}
+                        >
+                          Remove
+                        </Button>
                       </span>
                     </div>
                   </div>
