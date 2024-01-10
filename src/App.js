@@ -9,10 +9,30 @@ import Buyers from "./pages/buyers";
 import PurchasesPage from "./pages/purchases";
 import SalesPage from "./pages/sales";
 import InvoicesPage from "./pages/invoices";
+import io from "socket.io-client";
+import { useEffect } from "react";
+const socket = io(process.env.REACT_APP_API_URL);
 // import loadMessaging from "./firebase";
 
 function App() {
   //loadMessaging();
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected to server");
+    });
+
+    // socket.on("message", (message) => {
+    //   alert(message);
+    //   console.log("Received message from server:", message);
+    //   // Handle the notification (e.g., show a popup)
+    // });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
   return (
     <Router>
       <div className="App">
