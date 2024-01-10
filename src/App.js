@@ -9,8 +9,10 @@ import Buyers from "./pages/buyers";
 import PurchasesPage from "./pages/purchases";
 import SalesPage from "./pages/sales";
 import InvoicesPage from "./pages/invoices";
+// import loadMessaging from "./firebase";
 
 function App() {
+  //loadMessaging();
   return (
     <Router>
       <div className="App">

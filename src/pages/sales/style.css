@@ -21,7 +21,8 @@
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: 450px;
+  /* max-height: 450px; */
+  height: 500px;
   padding: 10px;
 }
 

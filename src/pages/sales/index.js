@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/layout";
 import Products from "../../services/products";
 import Sales from "../../services/sales";
-import { PlusCircle, XCircle } from "react-bootstrap-icons";
 import "./style.css";
 import { v4 as uuidv4 } from "uuid";
 import Receipt from "../../components/PrintReceipt";
@@ -23,7 +22,7 @@ const initialItem = {
 
 const SalesPage = () => {
   const lastRowRef = useRef(null);
-  const [selectedItems, setSelectedItems] = useState([initialItem]);
+  let [selectedItems, setSelectedItems] = useState([initialItem]);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [showToast, setShowToast] = useState(false);
@@ -159,21 +158,21 @@ const SalesPage = () => {
 
   const handleSave = async () => {
     try {
-      if (selectedItems[selectedItems?.length - 1]?.id) {
-        if (activeTab === "sales") {
-          const res = await Sales.add(selectedItems, totalPrice);
-          if (res?.data?.invoice) {
-            setMessage(res?.data?.message);
-            setShowToast(true);
-            setSelectedItems([initialItem]);
-          }
-        } else {
-          const res = await Sales.update(selectedItems, totalPrice);
-          if (res?.data?.message) {
-            setMessage(res?.data?.message);
-            setShowToast(true);
-            setSelectedItems([initialItem]);
-          }
+      selectedItems = selectedItems.filter((item) => item?.id !== "");
+
+      if (activeTab === "sales") {
+        const res = await Sales.add(selectedItems, totalPrice);
+        if (res?.data?.invoice) {
+          setMessage(res?.data?.message);
+          setShowToast(true);
+          setSelectedItems([initialItem]);
+        }
+      } else {
+        const res = await Sales.update(selectedItems, totalPrice);
+        if (res?.data?.message) {
+          setMessage(res?.data?.message);
+          setShowToast(true);
+          setSelectedItems([initialItem]);
         }
       }
     } catch (error) {
@@ -189,10 +188,6 @@ const SalesPage = () => {
   return (
     <Layout>
       <div className="d-flex flex-column h-100">
-        {/* <div className="heading">
-          <h2>Sale Form</h2>
-        </div> */}
-
         <div className="tabs">
           <Tabs
             defaultActiveKey="sales"
@@ -272,32 +267,6 @@ const SalesPage = () => {
 
                     <div className="col-md-2 d-flex flex-column">
                       <span className="actions">
-                        {/* <span
-                          className="d-inline-block"
-                          tabIndex="0"
-                          data-toggle="tooltip"
-                          title="Add Item"
-                        >
-                          <PlusCircle
-                            className="circles"
-                            size={30}
-                            color="green"
-                            onClick={handleAddItem}
-                          />
-                        </span> */}
-                        {/* <span
-                          className="d-inline-block"
-                          tabIndex="0"
-                          data-toggle="tooltip"
-                          title="Remove"
-                        >
-                          <XCircle
-                            className="circles"
-                            size={30}
-                            color="red"
-                            onClick={() => handleRemoveItem(item?.uuid)}
-                          />
-                        </span> */}
                         <Button
                           variant="danger"
                           onClick={() => handleRemoveItem(item?.uuid)}
@@ -382,32 +351,6 @@ const SalesPage = () => {
 
                     <div className="col-md-2 d-flex flex-column">
                       <span className="actions">
-                        {/* <span
-                          className="d-inline-block"
-                          tabIndex="0"
-                          data-toggle="tooltip"
-                          title="Add Item"
-                        >
-                          <PlusCircle
-                            className="circles"
-                            size={30}
-                            color="green"
-                            onClick={handleAddItem}
-                          />
-                        </span>
-                        <span
-                          className="d-inline-block"
-                          tabIndex="0"
-                          data-toggle="tooltip"
-                          title="Remove"
-                        >
-                          <XCircle
-                            className="circles"
-                            size={30}
-                            color="red"
-                            onClick={() => handleRemoveItem(item?.uuid)}
-                          />
-                        </span> */}
                         <Button
                           variant="danger"
                           onClick={() => handleRemoveItem(item?.uuid)}
