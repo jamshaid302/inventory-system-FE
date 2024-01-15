@@ -1,4 +1,3 @@
-import moment from "moment";
 import { apiRequests } from "../utils/apiRequests";
 import { purchasesRoutes } from "../utils/routes";
 

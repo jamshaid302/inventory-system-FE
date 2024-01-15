@@ -22,11 +22,10 @@ function App() {
       console.log("connected to server");
     });
 
-    // socket.on("message", (message) => {
-    //   alert(message);
-    //   console.log("Received message from server:", message);
-    //   // Handle the notification (e.g., show a popup)
-    // });
+    socket.on("message", (message) => {
+      alert(message);
+      // Handle the notification (e.g., show a popup)
+    });
 
     return () => {
       socket.off("connect");

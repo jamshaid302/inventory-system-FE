@@ -41,11 +41,13 @@ const Modal = ({
       return initialValues;
     };
 
-    if (!dataToUpdate || Object.keys(dataToUpdate).length === 0) {
-      formData({});
-    } else {
-      formData(initializeFormData());
-    }
+    formData(initializeFormData());
+
+    // if (!dataToUpdate || Object.keys(dataToUpdate).length === 0) {
+    //   formData(initializeFormData());
+    // } else {
+    //   formData(initializeFormData());
+    // }
   }, [fields, dataToUpdate, isEditMode]);
 
   const handleChange = (e) => {

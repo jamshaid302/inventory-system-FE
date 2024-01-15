@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Toast as BootstrapToast } from "bootstrap";
 
-const Toast = ({ message = "", showToast }) => {
+const Toast = ({ message = "", showToast, errorMessage = false }) => {
   useEffect(() => {
     const toastElement = document?.getElementById("myToast");
     if (toastElement && showToast) {
@@ -17,7 +17,9 @@ const Toast = ({ message = "", showToast }) => {
     >
       <div
         id="myToast"
-        className="toast hide d-flex bg-success text-white"
+        className={`toast hide d-flex ${
+          errorMessage ? "bg-danger" : "bg-success"
+        }  text-white`}
         role="alert"
         aria-live="assertive"
         aria-atomic="true"

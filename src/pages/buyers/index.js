@@ -20,6 +20,7 @@ const Buyers = () => {
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
   const [isEditMode, setEditMode] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required(),
@@ -59,7 +60,13 @@ const Buyers = () => {
 
   const showMessageToast = () => {
     if (showToast) {
-      return <Toast message={message} showToast={showToast} />;
+      return (
+        <Toast
+          message={message}
+          showToast={showToast}
+          errorMessage={errorMessage}
+        />
+      );
     }
   };
 
@@ -78,9 +85,12 @@ const Buyers = () => {
         setShowToast(true);
       }
     } catch (validationErrors) {
-      const errorMessages =
-        validationErrors?.length && validationErrors.errors.join("\n");
-      alert(errorMessages || validationErrors?.message);
+      const errorMessages = validationErrors.errors
+        .map((error) => error)
+        .join("\n");
+      setMessage(errorMessages);
+      setErrorMessage(true);
+      setShowToast(true);
     }
   };
 
