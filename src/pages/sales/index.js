@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import Products from "../../services/products";
 import Sales from "../../services/sales";
 import "./style.css";
 import { v4 as uuidv4 } from "uuid";
-import Receipt from "../../components/PrintReceipt";
 import Toast from "../../components/toast";
-import Select from "react-select";
-import Button from "react-bootstrap/Button";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import SalesForm from "../../components/salesForm";
 
 const initialItem = {
   id: "",
@@ -21,13 +19,11 @@ const initialItem = {
 };
 
 const SalesPage = () => {
-  const lastRowRef = useRef(null);
   let [selectedItems, setSelectedItems] = useState([initialItem]);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
-  const [isReceiptVisible, setIsReceiptVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("sales");
 
   useEffect(() => {
@@ -51,7 +47,9 @@ const SalesPage = () => {
   }, [showToast]);
 
   const handleChange = (e, index) => {
-    const selectedProduct = products.find((pro) => pro?.id == Number(e?.value));
+    const selectedProduct = products.find(
+      (pro) => pro?.id === Number(e?.value)
+    );
 
     selectedItems[index] = {
       ...selectedItems[index],
@@ -133,14 +131,6 @@ const SalesPage = () => {
         ...selectedItems,
         { ...initialItem, uuid: uuidv4().slice(0, 8) },
       ]);
-
-      setTimeout(() => {
-        lastRowRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-          inline: "nearest",
-        });
-      });
     }
   };
 
@@ -150,10 +140,6 @@ const SalesPage = () => {
     } else {
       setSelectedItems([initialItem]);
     }
-  };
-
-  const handlePrintReceipt = () => {
-    window.print();
   };
 
   const handleSave = async () => {
@@ -183,6 +169,7 @@ const SalesPage = () => {
 
   const handleTabSelect = (selectedTab) => {
     setActiveTab(selectedTab);
+    setSelectedItems([initialItem]);
   };
 
   return (
@@ -197,171 +184,25 @@ const SalesPage = () => {
             onSelect={handleTabSelect}
           >
             <Tab eventKey="sales" title="Sales Form">
-              <div className="scrollable-content">
-                {selectedItems.map((item, index) => (
-                  <div
-                    key={index}
-                    ref={index === selectedItems.length - 1 ? lastRowRef : null}
-                    className="row mt-4 mb-4 d-flex flex-row align-items-center"
-                  >
-                    <div className="col-md-2 d-flex flex-column">
-                      <label className="d-flex">Item</label>
-                      <Select
-                        options={products.map((prod) => ({
-                          value: prod?.id,
-                          label: `${prod?.itemName} (${prod?.company})`,
-                        }))}
-                        placeholder="Select an Item"
-                        value={
-                          selectedItems[index]?.id
-                            ? {
-                                value: selectedItems[index]?.id,
-                                label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
-                              }
-                            : null
-                        }
-                        onChange={(e) => handleChange(e, index)}
-                        isSearchable={true}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Price</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={item?.sellingPrice}
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Quantity</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={item?.quantity}
-                        onChange={(e) => handleQuantityChange(e, index)}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Discount</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={item?.discount}
-                        onChange={(e) => handleDiscountChange(e, index)}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start ">
-                      <label>Total</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={item?.totalItemPrice}
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column">
-                      <span className="actions">
-                        <Button
-                          variant="danger"
-                          onClick={() => handleRemoveItem(item?.uuid)}
-                        >
-                          Remove
-                        </Button>
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SalesForm
+                selectedItems={selectedItems}
+                products={products}
+                handleChange={handleChange}
+                handleQuantityChange={handleQuantityChange}
+                handleDiscountChange={handleDiscountChange}
+                handleRemoveItem={handleRemoveItem}
+              />
             </Tab>
             <Tab eventKey="returns" title="Returns">
-              <div className="scrollable-content">
-                {selectedItems.map((item, index) => (
-                  <div
-                    key={index}
-                    ref={index === selectedItems.length - 1 ? lastRowRef : null}
-                    className="row mt-4 mb-4 d-flex flex-row align-items-center"
-                  >
-                    <div className="col-md-2 d-flex flex-column">
-                      <label className="d-flex">Item</label>
-                      <Select
-                        options={products.map((prod) => ({
-                          value: prod?.id,
-                          label: `${prod?.itemName} (${prod?.company})`,
-                        }))}
-                        placeholder="Select an Item"
-                        value={
-                          selectedItems[index]?.id
-                            ? {
-                                value: selectedItems[index]?.id,
-                                label: `${selectedItems[index]?.name} (${selectedItems[index]?.company})`,
-                              }
-                            : null
-                        }
-                        onChange={(e) => handleChange(e, index)}
-                        isSearchable={true}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Price</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={item?.sellingPrice}
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Quantity</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={item?.quantity}
-                        onChange={(e) => handleQuantityChange(e, index)}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start">
-                      <label>Discount</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={item?.discount}
-                        disabled
-                        onChange={(e) => handleDiscountChange(e, index)}
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column align-items-start ">
-                      <label>Total</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={item?.totalItemPrice}
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-2 d-flex flex-column">
-                      <span className="actions">
-                        <Button
-                          variant="danger"
-                          onClick={() => handleRemoveItem(item?.uuid)}
-                        >
-                          Remove
-                        </Button>
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SalesForm
+                selectedItems={selectedItems}
+                products={products}
+                handleChange={handleChange}
+                handleQuantityChange={handleQuantityChange}
+                handleDiscountChange={handleDiscountChange}
+                handleRemoveItem={handleRemoveItem}
+                formTitle="Returns"
+              />
             </Tab>
           </Tabs>
         </div>
@@ -375,13 +216,6 @@ const SalesPage = () => {
 
           <div className="row mt-3">
             <div className="col-md-12">
-              {/* <button
-              type="button"
-              className="btn btn-success ms-2"
-              onClick={() => setIsReceiptVisible(true)}
-            >
-              Print
-            </button> */}
               <button
                 type="button"
                 className="btn btn-primary w-25"
@@ -393,13 +227,6 @@ const SalesPage = () => {
           </div>
         </div>
       </div>
-      {isReceiptVisible && (
-        <Receipt
-          data={selectedItems}
-          total={totalPrice}
-          onPrint={handlePrintReceipt}
-        />
-      )}
 
       {showToast && <Toast message={message} showToast={showToast} />}
     </Layout>
