@@ -53,11 +53,17 @@ const Modal = ({
   const handleChange = (e) => {
     let type = fields?.find((item) => e.target.name === item?.name).type;
 
-    formData((prev) => ({
-      ...prev,
+    // formData((prev) => ({
+    //   ...prev,
+    //   [e.target.name]:
+    //     type === "date" ? moment(e.target.value) : e.target.value,
+    // }));
+
+    formData({
+      ...data,
       [e.target.name]:
         type === "date" ? moment(e.target.value) : e.target.value,
-    }));
+    });
   };
 
   const handleSubmit = (e) => {
