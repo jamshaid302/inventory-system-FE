@@ -10,6 +10,7 @@ const SalesForm = ({
   handleQuantityChange,
   handleDiscountChange,
   handleRemoveItem,
+  lastRowRef,
   formTitle = "Sales Form",
 }) => {
   return (
@@ -17,6 +18,7 @@ const SalesForm = ({
       {selectedItems.map((item, index) => (
         <div
           key={index}
+          ref={index === selectedItems.length - 1 ? lastRowRef : null}
           className="row mt-4 mb-4 d-flex flex-row align-items-center"
         >
           <div className="col-md-2 d-flex flex-column">

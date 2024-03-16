@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Layout from "../../components/layout";
 import Products from "../../services/products";
 import Sales from "../../services/sales";
@@ -19,6 +19,7 @@ const initialItem = {
 };
 
 const SalesPage = () => {
+  const lastRowRef = useRef(null);
   let [selectedItems, setSelectedItems] = useState([initialItem]);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -131,6 +132,14 @@ const SalesPage = () => {
         ...selectedItems,
         { ...initialItem, uuid: uuidv4().slice(0, 8) },
       ]);
+
+      setTimeout(() => {
+        lastRowRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 100);
     }
   };
 
@@ -191,6 +200,7 @@ const SalesPage = () => {
                 handleQuantityChange={handleQuantityChange}
                 handleDiscountChange={handleDiscountChange}
                 handleRemoveItem={handleRemoveItem}
+                lastRowRef={lastRowRef}
               />
             </Tab>
             <Tab eventKey="returns" title="Returns">
