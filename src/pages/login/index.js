@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import User from "../../services/user";
 import { useNavigate } from "react-router-dom";
+import Toast from "../../components/toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,7 +22,7 @@ const LoginPage = () => {
     } catch (error) {
       console.log("Invlaid token", error?.message);
     }
-  }, []);
+  }, [navigate]);
 
   const handleChange = (name) => (e) => {
     setFormData((prev) => ({ ...prev, [name]: e.target?.value }));
@@ -26,13 +30,40 @@ const LoginPage = () => {
 
   const handleSubmit = async () => {
     const { email, password } = formData;
-    const res = await User.login(email, password);
+    try {
+      const { data } = await User.login(email, password);
 
-    if (res?.data?.token) {
-      localStorage.setItem("token", res?.data?.token);
-      navigate("/home");
-    } else {
+      if (data?.success) {
+        localStorage.setItem("token", data?.data?.token);
+        setMessage(data?.message);
+        setShowToast(true);
+        navigate("/home");
+      }
+    } catch (error) {
+      setMessage(error?.response?.data?.message);
+      setErrorMessage(true);
+      setShowToast(true);
       navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    if (showToast) {
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+  }, [showToast]);
+
+  const showMessageToast = () => {
+    if (showToast) {
+      return (
+        <Toast
+          message={message}
+          showToast={showToast}
+          errorMessage={errorMessage}
+        />
+      );
     }
   };
 
@@ -112,6 +143,7 @@ const LoginPage = () => {
           </div>
         </div>
       </section>
+      {showMessageToast()}
     </div>
   );
 };
