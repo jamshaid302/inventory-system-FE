@@ -2,13 +2,13 @@ importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js");
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-  apiKey: "AIzaSyBos3A51IdqVrncIg6ThCYSq1HDySGfDT8",
-  authDomain: "butt-sanitary.firebaseapp.com",
-  projectId: "butt-sanitary",
-  storageBucket: "butt-sanitary.appspot.com",
-  messagingSenderId: "411838110760",
-  appId: "1:411838110760:web:c904ef252c8af9bf2aa91d",
-  measurementId: "G-6MJS2JBMBX",
+  apiKey: "YOUR FIRSE BASE API_KEY",
+  authDomain: "AUTH_DOMAIN",
+  projectId: "YOUR PROJECT_ID",
+  storageBucket: "STORAGE_BUCKET",
+  messagingSenderId: "MESSAGING_SENDER_ID",
+  appId: "YOUR APP_ID",
+  measurementId: "MEASUREMENT_ID",
 };
 
 firebase.initializeApp(firebaseConfig);

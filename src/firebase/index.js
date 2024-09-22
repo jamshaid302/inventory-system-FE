@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBos3A51IdqVrncIg6ThCYSq1HDySGfDT8",
-  authDomain: "butt-sanitary.firebaseapp.com",
-  projectId: "butt-sanitary",
-  storageBucket: "butt-sanitary.appspot.com",
-  messagingSenderId: "411838110760",
-  appId: "1:411838110760:web:c904ef252c8af9bf2aa91d",
-  measurementId: "G-6MJS2JBMBX",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGIN_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 async function loadMessaging() {
@@ -32,8 +32,7 @@ async function loadMessaging() {
           // ...
         });
         getToken(messaging, {
-          vapidKey:
-            "BAmhRwjygvdH4j5vElgOVyhbmVNEow85nkeq4vRb1jzY0AYcIeq1t5o4Ex2YZkq-YSLupkuRv8DiRRhpDgW2enw",
+          vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
         })
           .then((token) => {
             console.log({ token });
