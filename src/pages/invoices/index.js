@@ -5,6 +5,7 @@ import moment from "moment";
 import BaseTable from "../../components/datatable";
 import { INVOICES_TABLE_COLUMNS } from "../../utils/constants";
 import InvoiceModal from "../../components/InvoiceModal";
+import { useNavigate } from "react-router-dom";
 
 const InvoicesPage = () => {
   const [invoices, setInvoices] = useState([]);
@@ -13,6 +14,7 @@ const InvoicesPage = () => {
   const [search, setSearch] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,8 +26,12 @@ const InvoicesPage = () => {
       }));
       setInvoices({ data, totalRecords: res?.data?.count });
     };
+
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     fetchData();
-  }, [first, rows, search]);
+  }, [first, rows, search, navigate]);
 
   const closeModal = () => {
     setModalVisible(false);

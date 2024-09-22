@@ -8,6 +8,7 @@ import Buyer from "../../services/buyers";
 import Swal from "sweetalert2";
 import moment from "moment";
 import Toast from "../../components/toast";
+import { useNavigate } from "react-router-dom";
 
 const Buyers = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,7 @@ const Buyers = () => {
   const [message, setMessage] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const navigate = useNavigate();
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required(),
@@ -40,14 +42,19 @@ const Buyers = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await Buyer.get(first, rows, search);
-      const data = res?.data?.buyers.map((item) => ({
+      const { buyers, count } = res?.data?.data;
+      const data = buyers?.map((item) => ({
         ...item,
         buyingDate: moment(item?.buyingDate).format("MMM-DD-YYYY"),
       }));
-      setData({ data, totalRecords: res?.data?.count });
+      setData({ data, totalRecords: count });
     };
+
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     fetchData();
-  }, [reloadPage, first, rows, search]);
+  }, [reloadPage, first, rows, search, navigate]);
 
   const openModal = () => {
     setEditMode(false);

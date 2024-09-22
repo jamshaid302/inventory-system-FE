@@ -9,6 +9,7 @@ import Products from "../../services/products";
 import moment from "moment";
 import Toast from "../../components/toast";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ProductPage = () => {
   const [data, setData] = useState([]);
@@ -23,6 +24,7 @@ const ProductPage = () => {
   const [message, setMessage] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const navigate = useNavigate();
 
   const schema = Yup.object().shape({
     itemName: Yup.string().required(),
@@ -46,15 +48,20 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await Products.get(first, rows, search);
-      const data = res?.data?.products.map((item) => ({
+      const { products, count } = res?.data?.data;
+      const data = products.map((item) => ({
         ...item,
         buyer: item?.buyer?.fullName,
         buyingDate: moment(item?.buyingDate).format("MM-DD-YYYY"),
       }));
-      setData({ data, totalRecords: res?.data?.count });
+      setData({ data, totalRecords: count });
     };
+
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     fetchData();
-  }, [reloadPage, first, rows, search]);
+  }, [reloadPage, first, rows, search, navigate]);
 
   useEffect(() => {
     const fetchBuyersForField = async (field) => {
@@ -71,15 +78,24 @@ const ProductPage = () => {
       );
       setFormFields(updatedFields);
     };
+
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     fetchDataAndUpdateState();
-  }, []);
+  }, [navigate]);
 
   const fetchAllBuyers = async () => {
-    const res = await Products.getBuyers();
-    return res?.data?.buyers?.map(({ id, fullName }) => ({
-      value: id,
-      text: fullName,
-    }));
+    try {
+      const res = await Products.getBuyers();
+      const { buyers } = res?.data?.data;
+      return buyers?.map(({ id, fullName }) => ({
+        value: id,
+        text: fullName,
+      }));
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   const openModal = () => {

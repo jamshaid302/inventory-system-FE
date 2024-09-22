@@ -8,6 +8,7 @@ import Toast from "../../components/toast";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import SalesForm from "../../components/salesForm";
+import { useNavigate } from "react-router-dom";
 
 const initialItem = {
   id: "",
@@ -26,14 +27,19 @@ const SalesPage = () => {
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
   const [activeTab, setActiveTab] = useState("sales");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const products = async () => {
       const res = await Products.getAll();
       setProducts(res?.data?.products);
     };
+
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     products();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     calculateInvoicePrice(selectedItems);

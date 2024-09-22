@@ -4,25 +4,30 @@ import Layout from "../../components/layout";
 import BarChart from "../../components/barChart";
 import Purchases from "../../services/purchases";
 import Sales from "../../services/sales";
+import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
   const [dashboardData, setDashbaordData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const purchasesRes = await Purchases.getTotalPurchasesAmount();
-        if (purchasesRes) {
-          setDashbaordData(purchasesRes?.data);
+
+        if (purchasesRes?.data?.success) {
+          setDashbaordData(purchasesRes?.data?.data);
         }
 
         const salesRes = await Sales.getSalesTotal();
-        if (salesRes) {
+        if (salesRes?.data?.success) {
+          const { salesTotal, currentDaySalesTotal, eachMonthSalesTotal } =
+            salesRes?.data?.data;
           setDashbaordData((prev) => ({
             ...prev,
-            salesTotal: salesRes?.data?.salesTotal,
-            currentDaySalesTotal: salesRes?.data?.currentDaySalesTotal,
-            monthlySalesTotal: salesRes?.data?.eachMonthSalesTotal,
+            salesTotal,
+            currentDaySalesTotal,
+            monthlySalesTotal: eachMonthSalesTotal,
           }));
         }
       } catch (error) {
@@ -30,8 +35,11 @@ const DashboardPage = () => {
       }
     };
 
+    const token = localStorage.getItem("token") || "";
+    if (!token) return navigate("/");
+
     fetchData();
-  }, []);
+  }, [navigate]);
 
   return (
     <Layout>

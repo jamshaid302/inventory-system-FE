@@ -12,20 +12,20 @@ import {
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-const Sidebar = ({ children, openModal }) => {
+const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   useEffect(() => {
     try {
       const token = localStorage.getItem("token") || "";
-      if (!token) navigate("/");
+      if (!token) return navigate("/");
       const decode = jwtDecode(token);
       setUser(decode);
     } catch (error) {
       console.log("Invlaid token", error?.message);
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
